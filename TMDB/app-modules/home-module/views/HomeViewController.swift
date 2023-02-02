@@ -72,7 +72,6 @@ public class HomeViewController: UIViewController, UICollectionViewDelegate {
             /// Response User Touch on Upcoming Collection View
             discoverCard.collectionView.rx.itemSelected.subscribe(onNext: { [self] (indexPath) in
                 /// Send User's choosen Upcoming Movie Object to response handleMovieFunction
-                print("collectionView")
                 presentor?.showDetailController(navigationController: self.navigationController! as! NavigationController, movieIdObject: discoverMoviesList.value[indexPath.row].id)
             }).disposed(by: bags)
         
@@ -91,6 +90,7 @@ public class HomeViewController: UIViewController, UICollectionViewDelegate {
             }).disposed(by: bags)
     }
        
+    //MARK: - Refresh Controll repsonse function
     @objc func refresh(_ sender: AnyObject) {
         Task {
             SVProgressHUD.show(withStatus: "Fetching Movies")
@@ -100,9 +100,8 @@ public class HomeViewController: UIViewController, UICollectionViewDelegate {
 }
 
 extension HomeViewController : UIScrollViewDelegate {
-    
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+
+    //MARK: - Check Scrollview position on genre collectionView
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == discoverCard.collectionView {
             presentor?.determineScrollViewPosition(scrollView)
@@ -112,10 +111,10 @@ extension HomeViewController : UIScrollViewDelegate {
 
 extension HomeViewController : PresenterToViewProtocol {
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Return Movies Array for CollectionView
+    /// Return movie array for movie collectionView
     /// - Parameters:
-    ///     - enumState: movie type that's gonan be passed onto the fetch movie endpoint
+    ///     - moviesArray: movie array for movie collectionView
     func showMovies(_ moviesArray: Array<Movies>) {
         DispatchQueue.main.async { [self] in
             SVProgressHUD.dismiss()
@@ -124,10 +123,10 @@ extension HomeViewController : PresenterToViewProtocol {
         discoverMoviesList.accept(moviesArray)
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Return Genre Array for CollectionView
+    /// Return genre array for genre collection view
     /// - Parameters:
-    ///     - enumState: movie type that's gonan be passed onto the fetch movie endpoint
+    ///     - genre : an object that return an array of genres for genre collectionview
     func showGenres(_ genre: Array<Genres>) {
         DispatchQueue.main.async { [self] in
             SVProgressHUD.dismiss()
@@ -136,10 +135,10 @@ extension HomeViewController : PresenterToViewProtocol {
         genresList.accept(genre)
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Return Scroll view position
+    /// Return result argument whether scrollview is already the bottom or not
     /// - Parameters:
-    ///     - enumState: movie type that's gonan be passed onto the fetch movie endpoint
+    ///     - result: movie type that's gonan be passed onto the fetch movie endpoint
     func showScrollViewPosition(_ result: Bool) {
         switch result {
             case true:
@@ -153,8 +152,7 @@ extension HomeViewController : PresenterToViewProtocol {
         }
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Show Error from Presenter
     func showError() {
         DispatchQueue.main.async { [self] in
             popupAlert(title: "Telah Terjadi Gangguan di Server!", message: "Silahkan coba beberapa saat lagi.", actionTitles: ["OK"], actionsStyle: [UIAlertAction.Style.cancel] ,actions:[{ [self] (action1) in

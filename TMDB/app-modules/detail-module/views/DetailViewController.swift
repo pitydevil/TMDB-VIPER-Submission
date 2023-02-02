@@ -54,7 +54,6 @@ class DetailViewController: UIViewController {
         //MARK: - Register Controller
         detailController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "detailViewController") as DetailViewController
        
-        
         //MARK: Interaction Observer
             //MARK: - Observer for Movie ID Object
             /// Observe movie id value changes, once value's changed, trigger view model on appear function
@@ -116,10 +115,10 @@ class DetailViewController: UIViewController {
 }
 
 extension DetailViewController : PresenterToViewDetailProtocol {
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Presentor for show movie reviews
+    /// Update user interface for movie reviews
     /// - Parameters:
-    ///     - enumState: movie type that's gonan be passed onto the fetch movie endpoint
+    ///     - reviewMovieobject: review array for the detail movied
     func showMovieReviews(_ reviewMovieobject: [Review]) {
         movieReviewlist.accept(reviewMovieobject)
         DispatchQueue.main.async { [self] in
@@ -134,17 +133,17 @@ extension DetailViewController : PresenterToViewDetailProtocol {
         }
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Presentor for failed movie fetching
+    /// update wkwebview to show youtube player is not available
     func showDetailMovieFailed() {
         wkWebView.isUserInteractionEnabled = false
         wkWebView.backgroundColor = .systemGray6
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Presentor for Show Detail Movie
+    /// Update user interface from detailMovieObject
     /// - Parameters:
-    ///     - enumState: movie type that's gonan be passed onto the fetch movie endpoint
+    ///     - detailMoviesObject: movieObject regarding movieDetails
     func showDetailMovie(_ detailMoviesObject: MovieDetails) {
         SVProgressHUD.dismiss()
         DispatchQueue.main.async { [self] in
@@ -160,10 +159,10 @@ extension DetailViewController : PresenterToViewDetailProtocol {
         }
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Presentor for detailMovie
+    /// Load WKWebView for youtube video player
     /// - Parameters:
-    ///     - enumState: movie type that's gonan be passed onto the fetch movie endpoint
+    ///     - detailMoviesVideosObject: youtube string key for youtube player
     func showDetailMoviesVideo(_ detailMoviesVideosobject: String) {
         DispatchQueue.main.async { [self] in
             guard let url = URL(string: "https://www.youtube.com/embed/\(detailMoviesVideosobject)") else {return}
@@ -171,16 +170,16 @@ extension DetailViewController : PresenterToViewDetailProtocol {
         }
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Presenter for Show Movie
+    /// Update movieRecommendation list for movie collectionView
     /// - Parameters:
-    ///     - enumState: movie type that's gonan be passed onto the fetch movie endpoint
+    ///     - movies: movie array for movie recommendation collectionView
     func showMovieRecommendation(_ movies: [Movies]) {
         movieRecommnedationList.accept(movies)
     }
     
-    //MARK: - Observer for Upcoming Movie List
-    /// Update upcomingMovieList on value changes
+    //MARK: - Presenter for Show Error
+    /// Notify user if there's error with the endpont fetch function
     func showError() {
         DispatchQueue.main.async { [self] in
             popupAlert(title: "Telah Terjadi Gangguan di Server!", message: "Silahkan coba beberapa saat lagi.", actionTitles: ["OK"], actionsStyle: [UIAlertAction.Style.cancel] ,actions:[{ [self] (action1) in

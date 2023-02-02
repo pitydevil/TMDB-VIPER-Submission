@@ -18,7 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
      
         let home = HomeRouter.createModule()
-//
 //        /* Initiating instance of ui-navigation-controller with view-controller */
         let navigationController = NavigationController()
         navigationController.viewControllers = [home]
@@ -33,7 +32,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.window = self.window
-        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
